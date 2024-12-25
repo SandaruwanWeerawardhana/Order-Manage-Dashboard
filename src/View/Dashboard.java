@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -217,6 +219,7 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         jLabelTime.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabelTime.setForeground(new java.awt.Color(0, 117, 8));
         jLabelTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelTime.setText("-");
 
@@ -436,7 +439,7 @@ public class Dashboard extends javax.swing.JFrame {
         ArrayList<OrderDetail> OrderlList = new ArrayList<>();
 
         DefaultTableModel dtm = (DefaultTableModel) Table.getModel();
-        
+
         for (int i = 0; i < dtm.getRowCount(); i++) {
             String itemCode = (String) dtm.getValueAt(i, 0);
             int orderQty = (int) dtm.getValueAt(i, 2);
@@ -451,7 +454,7 @@ public class Dashboard extends javax.swing.JFrame {
             boolean addOrderDetails = Controller.addOrderDetail(OrderlList);
             boolean updateStock = Controller.updateStock(OrderlList);
 
-            if (updateStock && isAdded && addOrderDetails ) {
+            if (updateStock && isAdded && addOrderDetails) {
                 JOptionPane.showMessageDialog(this, "Added Success");
                 generateOrderId();
             } else {
@@ -561,9 +564,12 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldOderDate;
     private javax.swing.JTextField jTextFieldQty;
     // End of variables declaration//GEN-END:variables
-    private void getDate() {
+  private void getDate() {
         jTextFieldOderDate.setText(LocalDate.now().toString());
 
+        LocalTime currentTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+        jLabelTime.setText(currentTime.format(formatter));
     }
 
     private String generateOrderId() {
